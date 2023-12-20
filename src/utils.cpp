@@ -29,8 +29,8 @@ void Vec2d::add(Vec2d v) {
 }
 
 void Vec2d::sub(Vec2d v) {
-	pos.x = pos.x + v.pos.x;
-	pos.y = pos.y + v.pos.y;
+	pos.x = pos.x - v.pos.x;
+	pos.y = pos.y - v.pos.y;
 }
 
 float Vec2d::dot(Vec2d v) {
@@ -63,6 +63,55 @@ void Vec2d::limit(float max) {
 	if (mag() > max) {
 		setmag(max);
 	}
+}
+
+float Vec2d::distance(Vec2d v) {
+	Vec2d vdist = copy();
+	vdist.sub(v);
+	return vdist.mag();
+}
+
+Vec2d Vec2d::perp() {
+	return Vec2d(-pos.y, pos.x);
+}
+
+void Vec2d::rotate(Vec2d base, float n) {
+	Vec2d direction = copy();
+	direction.sub(base);
+	float x = direction.pos.x * cosf(n) - direction.pos.y * sinf(n);
+	float y = direction.pos.x * sinf(n) + direction.pos.y * cosf(n);
+	pos.x = x + base.pos.x;
+	pos.y = y + base.pos.y;
+}
+
+Vec2d addVec(Vec2d v1, Vec2d v2) {
+	return Vec2d(v1.pos.x + v2.pos.x, v1.pos.y + v2.pos.y);
+}
+
+Vec2d subVec(Vec2d v1, Vec2d v2) {
+	return Vec2d(v1.pos.x - v2.pos.x, v1.pos.y - v2.pos.y);
+}
+
+Vec2d multVec(Vec2d v, float n) {
+	Vec2d vmult = v.copy();
+	vmult.mult(n);
+	return vmult;
+}
+
+Vec2d intersect(Vec2d start_a, Vec2d end_a, Vec2d start_b, Vec2d end_b) {
+	/*
+	line_a = end_a - start_a
+    line_b = end_b - start_b
+    cross1 = cross2d(line_a, line_b)
+    cross2 = cross2d(line_b, line_a)
+    if cross1 != 0:
+        s = cross2d(start_b - start_a, line_b) / cross1
+        u = cross2d(start_a - start_b, line_a) / cross2
+        if s > 0 and s < 1 and u > 0 and u < 1:
+            return start_a + line_a * s
+        else:
+            return None
+	*/
 }
 
 
